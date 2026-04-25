@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}กลุ่มยา{% endblock %}
+{% block content %}
+<div class="breadcrumbs">
+    <a href="{{ url_for('home') }}">กลุ่มโรค</a> / <strong>{{ group.name_th }}</strong>
+</div>
+
+<div class="grid two">
+    <section class="card">
+        <h2>{{ group.name_th }}</h2>
+        <p class="muted">{{ group.description }}</p>
+        <h3 style="margin-top: 14px;">เพิ่มกลุ่มยาในกลุ่มโรคนี้</h3>
+        <form method="POST" action="{{ url_for('create_drug_group', disease_group_id=group.id) }}">
+            <label>ชื่อกลุ่มยา
+                <input name="name" placeholder="เช่น ACE Inhibitors" required>
+            </label>
+            <label>คำอธิบายกลุ่มยา
+                <textarea name="description"></textarea>
+            </label>
+            <button type="submit">บันทึกกลุ่มยา</button>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>รายการกลุ่มยา</h2>
+        <p class="muted">คลิกเพื่อดูว่ายาในกลุ่มนี้มีอะไรบ้าง</p>
+        <div class="list">
+            {% for item in drug_groups %}
+            <div class="item">
+                <div>
+                    <a href="{{ url_for('drug_group_detail', drug_group_id=item.id) }}">{{ item.name }}</a>
+                    <div class="muted">จำนวนยา {{ item.drug_count }}</div>
+                </div>
+                <form method="POST" action="{{ url_for('delete_drug_group', drug_group_id=item.id) }}" onsubmit="return confirm('ลบกลุ่มยานี้? ยาทั้งหมดในกลุ่มจะถูกลบ');">
+                    <button type="submit" class="danger">ลบ</button>
+                </form>
+            </div>
+            {% else %}
+            <div class="muted">ยังไม่มีกลุ่มยา</div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

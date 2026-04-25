@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}ยาในกลุ่ม{% endblock %}
+{% block content %}
+<div class="breadcrumbs">
+    <a href="{{ url_for('home') }}">กลุ่มโรค</a> /
+    <a href="{{ url_for('disease_group_detail', disease_group_id=drug_group.disease_group_id) }}">{{ drug_group.disease_group_name }}</a> /
+    <strong>{{ drug_group.name }}</strong>
+</div>
+
+<div class="grid two">
+    <section class="card">
+        <h2>{{ drug_group.name }}</h2>
+        <p class="muted">{{ drug_group.description }}</p>
+        <h3 style="margin-top: 14px;">เพิ่มยาในกลุ่มนี้</h3>
+        <form method="POST" action="{{ url_for('create_drug', drug_group_id=drug_group.id) }}">
+            <label>ชื่อยา (Generic)
+                <input name="generic_name" required>
+            </label>
+            <label>ชื่อการค้า
+                <input name="brand_names">
+            </label>
+            <label>กลไกการออกฤทธิ์
+                <textarea name="mechanism"></textarea>
+            </label>
+            <label>ข้อบ่งใช้สำคัญ
+                <textarea name="indication_note"></textarea>
+            </label>
+            <label>ขนาดยาที่ใช้บ่อย
+                <textarea name="dose"></textarea>
+            </label>
+            <label>ผลข้างเคียง
+                <textarea name="side_effects"></textarea>
+            </label>
+            <label>ข้อควรระวัง
+                <textarea name="precautions"></textarea>
+            </label>
+            <label>การติดตามผล
+                <textarea name="monitoring"></textarea>
+            </label>
+            <label>จุดออกสอบ (Exam tip)
+                <textarea name="exam_tip"></textarea>
+            </label>
+            <button type="submit">บันทึกยา</button>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>รายการยาในกลุ่ม</h2>
+        <p class="muted">คลิกเข้าไปดูรายละเอียดยาแต่ละตัว</p>
+        <div class="list">
+            {% for drug in drugs %}
+            <div class="item">
+                <div>
+                    <a href="{{ url_for('drug_detail', drug_id=drug.id) }}">{{ drug.generic_name }}</a>
+                    <div class="muted">{{ drug.brand_names }}</div>
+                </div>
+                <form method="POST" action="{{ url_for('delete_drug', drug_id=drug.id) }}" onsubmit="return confirm('ลบยาตัวนี้?');">
+                    <button type="submit" class="danger">ลบ</button>
+                </form>
+            </div>
+            {% else %}
+            <div class="muted">ยังไม่มียาในกลุ่มนี้</div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

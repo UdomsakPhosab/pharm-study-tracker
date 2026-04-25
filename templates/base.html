@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Pharm Group Navigator{% endblock %}</title>
+    <style>
+        :root {
+            --bg: #f6f8fb;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --line: #e5e7eb;
+            --primary: #0f766e;
+            --primary-soft: #ccfbf1;
+            --danger: #b91c1c;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Noto Sans Thai", "Segoe UI", sans-serif;
+            color: var(--text);
+            background: linear-gradient(140deg, #eef2ff, #f0fdf4 45%, #fff7ed);
+            min-height: 100vh;
+        }
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+        .top {
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 10px; margin-bottom: 16px;
+        }
+        .brand { font-weight: 800; color: var(--primary); }
+        .nav a {
+            text-decoration: none; color: var(--text); padding: 8px 12px;
+            border: 1px solid var(--line); border-radius: 999px; background: #fff;
+            margin-left: 8px;
+        }
+        .card {
+            background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+            padding: 16px; box-shadow: 0 8px 24px rgba(2, 6, 23, 0.06);
+        }
+        .grid { display: grid; gap: 16px; }
+        .grid.two { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+        h1, h2, h3 { margin: 0 0 10px; }
+        .muted { color: var(--muted); }
+        form { display: grid; gap: 10px; }
+        label { font-size: .92rem; color: var(--muted); display: grid; gap: 6px; }
+        input, textarea, button {
+            font: inherit; border-radius: 10px;
+        }
+        input, textarea {
+            border: 1px solid #d1d5db; padding: 10px; width: 100%; background: #fff;
+        }
+        textarea { min-height: 90px; resize: vertical; }
+        button {
+            border: none; padding: 10px 12px; background: var(--primary);
+            color: #fff; font-weight: 700; cursor: pointer;
+        }
+        button.secondary { background: #e5e7eb; color: #111827; }
+        button.danger { background: var(--danger); }
+        .list { display: grid; gap: 10px; }
+        .item {
+            border: 1px solid var(--line); border-radius: 10px; padding: 12px;
+            display: flex; justify-content: space-between; gap: 10px; align-items: center;
+        }
+        .item a { color: #0c4a6e; font-weight: 700; text-decoration: none; }
+        .flash { padding: 10px 12px; border-radius: 10px; margin-bottom: 12px; }
+        .flash.success { background: #dcfce7; border: 1px solid #86efac; color: #166534; }
+        .flash.error { background: #fee2e2; border: 1px solid #fca5a5; color: #991b1b; }
+        .breadcrumbs { margin-bottom: 14px; font-size: .92rem; }
+        .breadcrumbs a { text-decoration: none; color: #0369a1; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="top">
+        <div class="brand">Pharm Group Navigator</div>
+        <div class="nav">
+            <a href="{{ url_for('home') }}">หน้าหลัก</a>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

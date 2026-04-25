@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% set page = 'diseases' %}
+{% block title %}{{ disease.name_th }} | Disease Detail{% endblock %}
+{% block content %}
+<div class="grid two">
+    <section class="card">
+        <h2>แก้ไขข้อมูลโรค</h2>
+        <form method="POST">
+            <label>ชื่อโรค (TH)
+                <input name="name_th" value="{{ disease.name_th }}" required />
+            </label>
+            <label>ชื่อโรค (EN)
+                <input name="name_en" value="{{ disease.name_en }}" />
+            </label>
+            <label>หมวดหมู่
+                <input name="category" value="{{ disease.category }}" />
+            </label>
+            <label>สรุปโรค
+                <textarea name="summary">{{ disease.summary }}</textarea>
+            </label>
+            <label>Guideline note
+                <textarea name="guideline_note">{{ disease.guideline_note }}</textarea>
+            </label>
+            <div class="inline">
+                <button type="submit">บันทึกการแก้ไข</button>
+            </div>
+        </form>
+        <form method="POST" action="{{ url_for('delete_disease', disease_id=disease.id) }}" onsubmit="return confirm('ยืนยันลบโรคนี้? ลิงก์ข้อบ่งใช้จะถูกลบด้วย');">
+            <button type="submit" class="danger">ลบโรคนี้</button>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>เชื่อมยาเข้ากับโรคนี้</h2>
+        {% if available_drugs %}
+        <form method="POST" action="{{ url_for('create_indication') }}">
+            <input type="hidden" name="disease_id" value="{{ disease.id }}" />
+            <input type="hidden" name="next_page" value="disease" />
+            <label>เลือกยา
+                <select name="drug_id" required>
+                    {% for drug in available_drugs %}
+                    <option value="{{ drug.id }}">{{ drug.generic_name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>Line of therapy
+                <input name="line_of_therapy" placeholder="first-line / second-line" />
+            </label>
+            <label>Role
+                <input name="role" placeholder="main / adjunct / rescue" />
+            </label>
+            <label>Evidence level
+                <input name="evidence_level" placeholder="A/B/C" />
+            </label>
+            <label>Special population note
+                <textarea name="special_population_note"></textarea>
+            </label>
+            <label>Exam high-yield
+                <textarea name="exam_high_yield" placeholder="จุดจำสอบ"></textarea>
+            </label>
+            <button type="submit">เพิ่มข้อบ่งใช้</button>
+        </form>
+        {% else %}
+            <p class="muted">ยังไม่มียาให้เชื่อม หรือเชื่อมครบแล้วทั้งหมด</p>
+        {% endif %}
+    </section>
+</div>
+
+<section class="card" style="margin-top: 16px;">
+    <h2>ยาที่ใช้ในโรคนี้</h2>
+    {% if linked_drugs %}
+    <table class="table-list">
+        <thead>
+            <tr>
+                <th>ยา</th>
+                <th>แผนการใช้</th>
+                <th>Exam note</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in linked_drugs %}
+            <tr>
+                <td>
+                    <a class="link" href="{{ url_for('drug_detail', drug_id=row.drug_id) }}">{{ row.generic_name }}</a><br>
+                    <span class="muted">{{ row.drug_class }}</span>
+                </td>
+                <td>
+                    <span class="badge">{{ row.line_of_therapy or '-' }}</span>
+                    <p class="muted">Role: {{ row.role or '-' }} | Evidence: {{ row.evidence_level or '-' }}</p>
+                    <p>{{ row.special_population_note }}</p>
+                </td>
+                <td>{{ row.exam_high_yield }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('delete_indication', indication_id=row.indication_id) }}" onsubmit="return confirm('ลบความเชื่อมโยงนี้?');">
+                        <input type="hidden" name="back_to" value="disease" />
+                        <button class="secondary" type="submit">ลบ</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p class="muted">ยังไม่มีข้อมูลข้อบ่งใช้</p>
+    {% endif %}
+</section>
+{% endblock %}

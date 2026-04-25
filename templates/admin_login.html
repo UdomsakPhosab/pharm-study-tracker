@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/fontsource-kanit@4.0.0/index.css" rel="stylesheet">
+  <style>body{font-family:'Kanit',sans-serif;background:#020617;color:#e2e8f0;}</style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+  <form method="post" class="w-full max-w-sm bg-slate-900 border border-slate-700 rounded-2xl p-6 space-y-4">
+    <h1 class="text-2xl font-bold">Admin Login</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <p class="text-sm {% if category == 'error' %}text-red-400{% else %}text-green-400{% endif %}">{{ message }}</p>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <div>
+      <label class="text-sm">Username</label>
+      <input name="username" required class="mt-1 w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700" />
+    </div>
+    <div>
+      <label class="text-sm">Password</label>
+      <input name="password" type="password" required class="mt-1 w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700" />
+    </div>
+    <button class="w-full py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 font-semibold">เข้าสู่ระบบ</button>
+  </form>
+</body>
+</html>

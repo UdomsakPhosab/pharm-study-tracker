@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% set page = 'dashboard' %}
+{% block title %}Dashboard | Pharm Study Tracker{% endblock %}
+{% block content %}
+<div class="grid three" style="margin-bottom: 16px;">
+    <section class="card">
+        <div class="muted">โรคทั้งหมด</div>
+        <div class="kpi">{{ disease_count }}</div>
+    </section>
+    <section class="card">
+        <div class="muted">ยาทั้งหมด</div>
+        <div class="kpi">{{ drug_count }}</div>
+    </section>
+    <section class="card">
+        <div class="muted">ลิงก์ข้อบ่งใช้</div>
+        <div class="kpi">{{ link_count }}</div>
+    </section>
+</div>
+
+<section class="card" style="margin-bottom: 16px;">
+    <h2>ค้นหาเร็ว</h2>
+    <form method="GET" action="{{ url_for('dashboard') }}" class="inline">
+        <input type="text" name="q" value="{{ q }}" placeholder="พิมพ์ชื่อโรค, ชื่อยา, class" />
+        <button type="submit">ค้นหา</button>
+        {% if q %}<a class="link" href="{{ url_for('dashboard') }}">ล้างคำค้น</a>{% endif %}
+    </form>
+
+    {% if q %}
+    <div class="grid two" style="margin-top: 12px;">
+        <div>
+            <h3>ผลลัพธ์โรค</h3>
+            {% if search_diseases %}
+                {% for disease in search_diseases %}
+                    <p><a class="link" href="{{ url_for('disease_detail', disease_id=disease.id) }}">{{ disease.name_th }}</a> <span class="muted">{{ disease.name_en }}</span></p>
+                {% endfor %}
+            {% else %}
+                <p class="muted">ไม่พบข้อมูลโรค</p>
+            {% endif %}
+        </div>
+        <div>
+            <h3>ผลลัพธ์ยา</h3>
+            {% if search_drugs %}
+                {% for drug in search_drugs %}
+                    <p><a class="link" href="{{ url_for('drug_detail', drug_id=drug.id) }}">{{ drug.generic_name }}</a> <span class="muted">{{ drug.drug_class }}</span></p>
+                {% endfor %}
+            {% else %}
+                <p class="muted">ไม่พบข้อมูลยา</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</section>
+
+<div class="grid two">
+    <section class="card">
+        <h2>โรคที่เพิ่มล่าสุด</h2>
+        {% if recent_diseases %}
+            {% for disease in recent_diseases %}
+                <p>
+                    <a class="link" href="{{ url_for('disease_detail', disease_id=disease.id) }}">{{ disease.name_th }}</a>
+                    <span class="muted">{{ disease.category }}</span>
+                </p>
+            {% endfor %}
+        {% else %}
+            <p class="muted">ยังไม่มีข้อมูลโรค</p>
+        {% endif %}
+    </section>
+
+    <section class="card">
+        <h2>ยาที่เพิ่มล่าสุด</h2>
+        {% if recent_drugs %}
+            {% for drug in recent_drugs %}
+                <p>
+                    <a class="link" href="{{ url_for('drug_detail', drug_id=drug.id) }}">{{ drug.generic_name }}</a>
+                    <span class="muted">{{ drug.drug_class }}</span>
+                </p>
+            {% endfor %}
+        {% else %}
+            <p class="muted">ยังไม่มีข้อมูลยา</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

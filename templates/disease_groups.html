@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}กลุ่มโรค{% endblock %}
+{% block content %}
+<div class="grid two">
+    <section class="card">
+        <h2>เพิ่มกลุ่มโรค</h2>
+        <form method="POST" action="{{ url_for('create_disease_group') }}">
+            <label>ชื่อกลุ่มโรค
+                <input name="name_th" placeholder="เช่น โรคหัวใจและหลอดเลือด" required>
+            </label>
+            <label>คำอธิบาย
+                <textarea name="description" placeholder="สรุปขอบเขตของกลุ่มโรคนี้"></textarea>
+            </label>
+            <button type="submit">บันทึกกลุ่มโรค</button>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>รายการกลุ่มโรค</h2>
+        <p class="muted">คลิกเข้าไปดูกลุ่มยาในโรคนั้นได้ทันที</p>
+        <div class="list">
+            {% for group in groups %}
+            <div class="item">
+                <div>
+                    <a href="{{ url_for('disease_group_detail', disease_group_id=group.id) }}">{{ group.name_th }}</a>
+                    <div class="muted">กลุ่มยา {{ group.drug_group_count }} | ยาทั้งหมด {{ group.drug_count }}</div>
+                </div>
+                <form method="POST" action="{{ url_for('delete_disease_group', disease_group_id=group.id) }}" onsubmit="return confirm('ลบกลุ่มโรคนี้? ข้อมูลกลุ่มยาและยาจะถูกลบด้วย');">
+                    <button type="submit" class="danger">ลบ</button>
+                </form>
+            </div>
+            {% else %}
+            <div class="muted">ยังไม่มีกลุ่มโรค</div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% set page = 'diseases' %}
+{% block title %}Diseases | Pharm Study Tracker{% endblock %}
+{% block content %}
+<div class="grid two">
+    <section class="card">
+        <h2>เพิ่มโรคใหม่</h2>
+        <form method="POST">
+            <label>ชื่อโรค (TH)
+                <input name="name_th" required />
+            </label>
+            <label>ชื่อโรค (EN)
+                <input name="name_en" />
+            </label>
+            <label>หมวดหมู่
+                <input name="category" placeholder="เช่น Cardio, Endocrine" />
+            </label>
+            <label>สรุปโรค
+                <textarea name="summary"></textarea>
+            </label>
+            <label>Guideline note
+                <textarea name="guideline_note"></textarea>
+            </label>
+            <button type="submit">บันทึกโรค</button>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>รายการโรค</h2>
+        {% if diseases %}
+        <table class="table-list">
+            <thead>
+                <tr>
+                    <th>ชื่อโรค</th>
+                    <th>หมวด</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for disease in diseases %}
+                <tr>
+                    <td>
+                        <strong>{{ disease.name_th }}</strong><br>
+                        <span class="muted">{{ disease.name_en }}</span>
+                    </td>
+                    <td>{{ disease.category }}</td>
+                    <td><a class="link" href="{{ url_for('disease_detail', disease_id=disease.id) }}">ดูรายละเอียด</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="muted">ยังไม่มีข้อมูลโรค</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

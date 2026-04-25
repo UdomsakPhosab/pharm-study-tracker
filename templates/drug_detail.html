@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}รายละเอียดยา{% endblock %}
+{% block content %}
+<div class="breadcrumbs">
+    <a href="{{ url_for('home') }}">กลุ่มโรค</a> /
+    <a href="{{ url_for('disease_group_detail', disease_group_id=drug.disease_group_id) }}">{{ drug.disease_group_name }}</a> /
+    <a href="{{ url_for('drug_group_detail', drug_group_id=drug.drug_group_id) }}">{{ drug.drug_group_name }}</a> /
+    <strong>{{ drug.generic_name }}</strong>
+</div>
+
+<div class="card">
+    <h2>รายละเอียดยา: {{ drug.generic_name }}</h2>
+    <form method="POST">
+        <label>ชื่อยา (Generic)
+            <input name="generic_name" value="{{ drug.generic_name }}" required>
+        </label>
+        <label>ชื่อการค้า
+            <input name="brand_names" value="{{ drug.brand_names }}">
+        </label>
+        <label>กลไกการออกฤทธิ์
+            <textarea name="mechanism">{{ drug.mechanism }}</textarea>
+        </label>
+        <label>ข้อบ่งใช้สำคัญ
+            <textarea name="indication_note">{{ drug.indication_note }}</textarea>
+        </label>
+        <label>ขนาดยาที่ใช้บ่อย
+            <textarea name="dose">{{ drug.dose }}</textarea>
+        </label>
+        <label>ผลข้างเคียง
+            <textarea name="side_effects">{{ drug.side_effects }}</textarea>
+        </label>
+        <label>ข้อควรระวัง
+            <textarea name="precautions">{{ drug.precautions }}</textarea>
+        </label>
+        <label>การติดตามผล
+            <textarea name="monitoring">{{ drug.monitoring }}</textarea>
+        </label>
+        <label>จุดออกสอบ (Exam tip)
+            <textarea name="exam_tip">{{ drug.exam_tip }}</textarea>
+        </label>
+        <button type="submit">บันทึกการแก้ไข</button>
+    </form>
+</div>
+{% endblock %}
