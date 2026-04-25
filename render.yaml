@@ -2,16 +2,13 @@ services:
   - type: web
     name: pharm-study-tracker
     runtime: python
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
     envVars:
       - key: SECRET_KEY
         generateValue: true
       - key: DATABASE_PATH
-        value: /var/data/pharm_study.db
+        value: /tmp/pharm_study.db
       - key: FLASK_DEBUG
         value: "0"
-    disk:
-      name: pharm-study-data
-      mountPath: /var/data
-      sizeGB: 1
